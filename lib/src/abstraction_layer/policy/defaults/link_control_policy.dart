@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 mixin LinkControlPolicy implements LinkPolicy, LinkJointPolicy {
   @override
   onLinkTapUp(String linkId, TapUpDetails details) {
-    canvasWriter.model.hideAllLinkDeleteIcons();
+    canvasWriter.model.hideAllTapLinkWidgets();
     canvasWriter.model.hideAllLinkJoints();
     canvasWriter.model.showLinkJoints(linkId);
 
-    canvasWriter.model.showDeleteIconOnPosition(linkId,
+    canvasWriter.model.showTapLinkWidgetOnPosition(linkId,
         canvasReader.state.fromCanvasCoordinates(details.localPosition));
   }
 
@@ -17,7 +17,7 @@ mixin LinkControlPolicy implements LinkPolicy, LinkJointPolicy {
 
   @override
   onLinkScaleStart(String linkId, ScaleStartDetails details) {
-    canvasWriter.model.hideAllLinkDeleteIcons();
+    canvasWriter.model.hideAllTapLinkWidgets();
     canvasWriter.model.hideAllLinkJoints();
     canvasWriter.model.showLinkJoints(linkId);
     segmentIndex = canvasReader.model
@@ -34,6 +34,29 @@ mixin LinkControlPolicy implements LinkPolicy, LinkJointPolicy {
     if (segmentIndex != null) {
       canvasWriter.model.setLinkMiddlePointPosition(
           linkId, details.localFocalPoint, segmentIndex);
+      canvasWriter.model.updateLink(linkId);
+    }
+  }
+
+  @override
+  onLinkLongPressStart(String linkId, LongPressStartDetails details) {
+    canvasWriter.model.hideAllTapLinkWidgets();
+    canvasWriter.model.hideAllLinkJoints();
+    canvasWriter.model.showLinkJoints(linkId);
+    segmentIndex = canvasReader.model
+        .determineLinkSegmentIndex(linkId, details.localPosition);
+    if (segmentIndex != null) {
+      canvasWriter.model
+          .insertLinkMiddlePoint(linkId, details.localPosition, segmentIndex);
+      canvasWriter.model.updateLink(linkId);
+    }
+  }
+
+  @override
+  onLinkLongPressMoveUpdate(String linkId, LongPressMoveUpdateDetails details) {
+    if (segmentIndex != null) {
+      canvasWriter.model.setLinkMiddlePointPosition(
+          linkId, details.localPosition, segmentIndex);
       canvasWriter.model.updateLink(linkId);
     }
   }

@@ -13,8 +13,8 @@ class LinkData with ChangeNotifier {
   final List<Offset> linkPoints;
 
   bool areJointsVisible = false;
-  bool isDeleteIconVisible = false;
-  Offset deleteIconPosition = Offset.zero;
+  bool isTapLinkWidgetVisible = false;
+  Offset tapLinkPosition = Offset.zero;
 
   dynamic data;
 
@@ -92,7 +92,7 @@ class LinkData with ChangeNotifier {
       var point2 = linkPoints[i + 1] * canvasScale + canvasPosition;
 
       Path rect = VectorUtils.getRectAroundLine(
-          point1, point2, canvasScale * (linkStyle.width + 5));
+          point1, point2, canvasScale * (linkStyle.lineWidth + 5));
 
       if (rect.contains(position)) {
         return i + 1;
@@ -111,18 +111,18 @@ class LinkData with ChangeNotifier {
     notifyListeners();
   }
 
-  showDeleteIcon() {
-    isDeleteIconVisible = true;
+  showTapLinkWidget() {
+    isTapLinkWidgetVisible = true;
     notifyListeners();
   }
 
-  hideLinkDeleteIcon() {
-    isDeleteIconVisible = false;
+  hideTapLinkWidget() {
+    isTapLinkWidgetVisible = false;
     notifyListeners();
   }
 
-  setDeleteIconPosition(Offset position) {
-    deleteIconPosition = position;
+  setTapLinkPosition(Offset position) {
+    tapLinkPosition = position;
     notifyListeners();
   }
 }

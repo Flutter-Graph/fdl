@@ -89,9 +89,10 @@ mixin ComponentWriter on ModelWriter {
     return _canvasModel.moveComponentToTheFront(componentId);
   }
 
-  moveComponentToTheFrontWithChildren(String componentId) {
+  int moveComponentToTheFrontWithChildren(String componentId) {
     int zOrder = moveComponentToTheFront(componentId);
     _setZOrderToChildren(componentId, zOrder);
+    return zOrder;
   }
 
   _setZOrderToChildren(String componentId, int zOrder) {
@@ -103,6 +104,12 @@ mixin ComponentWriter on ModelWriter {
 
   int moveComponentToTheBack(String componentId) {
     return _canvasModel.moveComponentToTheBack(componentId);
+  }
+
+  int moveComponentToTheBackWithChildren(String componentId) {
+    int zOrder = moveComponentToTheBack(componentId);
+    _setZOrderToChildren(componentId, zOrder);
+    return zOrder;
   }
 
   resizeComponent(String componentId, Offset deltaSize) {
@@ -142,18 +149,18 @@ mixin LinkWriter on ModelWriter {
     });
   }
 
-  showDeleteIconOnPosition(String linkId, Offset position) {
-    _canvasModel.links[linkId].showDeleteIcon();
-    _canvasModel.links[linkId].setDeleteIconPosition(position);
+  showTapLinkWidgetOnPosition(String linkId, Offset position) {
+    _canvasModel.links[linkId].showTapLinkWidget();
+    _canvasModel.links[linkId].setTapLinkPosition(position);
   }
 
-  hideLinkDeleteIcon(String linkId) {
-    _canvasModel.links[linkId].hideLinkDeleteIcon();
+  hideTapLinkWidget(String linkId) {
+    _canvasModel.links[linkId].hideTapLinkWidget();
   }
 
-  hideAllLinkDeleteIcons() {
+  hideAllTapLinkWidgets() {
     _canvasModel.links.values.forEach((link) {
-      link.hideLinkDeleteIcon();
+      link.hideTapLinkWidget();
     });
   }
 
