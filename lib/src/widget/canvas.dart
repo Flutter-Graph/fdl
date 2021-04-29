@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 class DiagramEditorCanvas extends StatefulWidget {
   final PolicySet policy;
 
+  /// The canvas where all components and links are shown on.
   const DiagramEditorCanvas({
     Key key,
     @required this.policy,
@@ -52,31 +53,16 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
     var zOrderedComponents = canvasModel.components.values.toList();
     zOrderedComponents.sort((a, b) => a.zOrder.compareTo(b.zOrder));
 
-    List<Widget> componentWidgetList = [];
-    zOrderedComponents.forEach((componentData) {
-      componentWidgetList.add(
-        ChangeNotifierProvider<ComponentData>.value(
-          value: componentData,
-          child: Component(
-            policy: widget.policy,
+    return zOrderedComponents
+        .map(
+          (componentData) => ChangeNotifierProvider<ComponentData>.value(
+            value: componentData,
+            child: Component(
+              policy: widget.policy,
+            ),
           ),
-        ),
-      );
-      componentWidgetList.add(
-        ChangeNotifierProvider<ComponentData>.value(
-          value: componentData,
-          builder: (context, child) {
-            return Consumer<ComponentData>(
-              builder: (context, data, child) {
-                return widget.policy
-                    .showCustomWidgetWithComponentData(context, data);
-              },
-            );
-          },
-        ),
-      );
-    });
-    return componentWidgetList;
+        )
+        .toList();
   }
 
   List<Widget> showLinks(CanvasModel canvasModel) {

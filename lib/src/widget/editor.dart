@@ -8,6 +8,16 @@ import 'package:provider/provider.dart';
 class DiagramEditor extends StatefulWidget {
   final DiagramEditorContext diagramEditorContext;
 
+  /// The main widget of [diagram_editor] library.
+  ///
+  /// In this widget all the editing of a diagram happens.
+  ///
+  /// How to use it: [diagram_editor](https://pub.dev/packages/diagram_editor).
+  ///
+  /// Source code: [github](https://github.com/Arokip/fdl).
+  ///
+  /// It takes [DiagramEditorContext] as required parameter.
+  /// You should define its size in its parent widget, eg. Container.
   DiagramEditor({
     Key key,
     @required this.diagramEditorContext,

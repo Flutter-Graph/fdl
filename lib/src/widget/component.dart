@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 class Component extends StatelessWidget {
   final PolicySet policy;
 
+  /// Fundamental building unit of a diagram. Represents one component on the canvas.
   const Component({
     Key key,
     this.policy,
@@ -43,6 +44,7 @@ class Component extends StatelessWidget {
                   child: policy.showComponentBody(componentData),
                 ),
               ),
+              policy.showCustomWidgetWithComponentData(context, componentData),
             ],
           ),
           onTap: () => policy.onComponentTap(componentData.id),
