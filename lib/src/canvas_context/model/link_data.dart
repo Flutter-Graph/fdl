@@ -14,7 +14,7 @@ class LinkData with ChangeNotifier {
   final String targetComponentId;
 
   /// Defines link design such as color, width and arrowheads.
-  LinkStyle linkStyle;
+  final LinkStyle linkStyle;
 
   /// Points from which the link is drawn on canvas.
   ///
@@ -29,13 +29,13 @@ class LinkData with ChangeNotifier {
 
   /// Represents data of a link/connection in the model.
   LinkData({
-    this.id,
-    this.sourceComponentId,
-    this.targetComponentId,
-    this.linkStyle,
-    this.linkPoints,
+    required this.id,
+    required this.sourceComponentId,
+    required this.targetComponentId,
+    LinkStyle? linkStyle,
+    required this.linkPoints,
     this.data,
-  });
+  }) : linkStyle = linkStyle ?? LinkStyle();
 
   /// Updates this link on the canvas.
   ///
@@ -124,7 +124,7 @@ class LinkData with ChangeNotifier {
   /// Segments are indexed from 1.
   /// If there is no link segment on the tap location it returns null.
   /// It should take a [localPosition] from a [onLinkTap] function or similar.
-  int determineLinkSegmentIndex(
+  int? determineLinkSegmentIndex(
     Offset position,
     Offset canvasPosition,
     double canvasScale,
@@ -154,4 +154,25 @@ class LinkData with ChangeNotifier {
     areJointsVisible = false;
     notifyListeners();
   }
+
+  LinkData.fromJson(
+    Map<String, dynamic> json, {
+    Function(Map<String, dynamic> json)? decodeCustomLinkData,
+  })  : id = json['id'],
+        sourceComponentId = json['source_component_id'],
+        targetComponentId = json['target_component_id'],
+        linkStyle = LinkStyle.fromJson(json['link_style']),
+        linkPoints = (json['link_points'] as List)
+            .map((point) => Offset(point[0], point[1]))
+            .toList(),
+        data = decodeCustomLinkData?.call(json['dynamic_data']);
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'source_component_id': sourceComponentId,
+        'target_component_id': targetComponentId,
+        'link_style': linkStyle,
+        'link_points': linkPoints.map((point) => [point.dx, point.dy]).toList(),
+        'dynamic_data': data?.toJson(),
+      };
 }

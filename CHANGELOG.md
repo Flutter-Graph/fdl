@@ -1,3 +1,23 @@
+# 0.1.2
+
+* Add `serializeDiagram()` and `deserializeDiagram()` functions to allow saving the diagram.
+* Update dependencies.
+* Example update -- it should explain how to use serialization.
+
+# 0.1.1
+
+* Format code
+
+# 0.1.0
+
+* ### Migrate to null-safety.
+
+* Adds componentExists function
+* Adds linkExists function
+
+# 0.0.12
+
+* Update dependencies in pubspec.yaml file 
 
 # 0.0.11
 
