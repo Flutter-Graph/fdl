@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CanvasState with ChangeNotifier {
-  Offset _position = Offset(0, 0);
+  Offset _position = const Offset(0, 0);
   double _scale = 1.0;
 
   double mouseScaleSpeed = 0.8;
@@ -21,28 +21,28 @@ class CanvasState with ChangeNotifier {
 
   double get scale => _scale;
 
-  updateCanvas() {
+  void updateCanvas() {
     notifyListeners();
   }
 
-  setPosition(Offset position) {
+  void setPosition(Offset position) {
     _position = position;
   }
 
-  setScale(double scale) {
+  void setScale(double scale) {
     _scale = scale;
   }
 
-  updatePosition(Offset offset) {
+  void updatePosition(Offset offset) {
     _position += offset;
   }
 
-  updateScale(double scale) {
+  void updateScale(double scale) {
     _scale *= scale;
   }
 
-  resetCanvasView() {
-    _position = Offset(0, 0);
+  void resetCanvasView() {
+    _position = const Offset(0, 0);
     _scale = 1.0;
     notifyListeners();
   }

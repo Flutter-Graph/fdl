@@ -71,26 +71,28 @@ class LinkPainter extends CustomPainter {
       }
     }
 
-    paint..style = PaintingStyle.fill;
+    paint.style = PaintingStyle.fill;
     canvas.drawPath(
-        linkStyle.getArrowTipPath(
-          linkStyle.arrowType,
-          linkStyle.arrowSize,
-          linkPoints[linkPoints.length - 2],
-          linkPoints[linkPoints.length - 1],
-          scale,
-        ),
-        paint);
+      linkStyle.getArrowTipPath(
+        linkStyle.arrowType,
+        linkStyle.arrowSize,
+        linkPoints[linkPoints.length - 2],
+        linkPoints[linkPoints.length - 1],
+        scale,
+      ),
+      paint,
+    );
 
     canvas.drawPath(
-        linkStyle.getArrowTipPath(
-          linkStyle.backArrowType,
-          linkStyle.backArrowSize,
-          linkPoints[1],
-          linkPoints[0],
-          scale,
-        ),
-        paint);
+      linkStyle.getArrowTipPath(
+        linkStyle.backArrowType,
+        linkStyle.backArrowSize,
+        linkPoints[1],
+        linkPoints[0],
+        scale,
+      ),
+      paint,
+    );
 
     // DEBUG:
     // paint
@@ -111,18 +113,19 @@ class LinkPainter extends CustomPainter {
   }
 
   Path makeWiderLinePath(double hitAreaWidth) {
-    Path path = new Path();
+    Path path = Path();
     for (int i = 0; i < linkPoints.length - 1; i++) {
       var point1 = linkPoints[i];
       var point2 = linkPoints[i + 1];
 
+      // DEBUG:
       // if (i == 0)
       //   point1 = PainterUtils.getShorterLineStart(point1, point2, scale * 10);
       // if (i == linkPoints.length - 2)
       //   point2 = PainterUtils.getShorterLineEnd(point1, point2, scale * 10);
 
       path.addPath(VectorUtils.getRectAroundLine(point1, point2, hitAreaWidth),
-          Offset(0, 0));
+          const Offset(0, 0));
     }
     return path;
   }

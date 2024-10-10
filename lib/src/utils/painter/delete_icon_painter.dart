@@ -26,7 +26,7 @@ class DeleteIconPainter extends CustomPainter {
 
     canvas.drawCircle(location, radius, paint);
 
-    paint..color = color;
+    paint.color = color;
 
     var halfRadius = radius / 2;
     canvas.drawLine(
@@ -47,11 +47,13 @@ class DeleteIconPainter extends CustomPainter {
 
   @override
   bool hitTest(Offset position) {
-    Path path = new Path();
-    path.addOval(Rect.fromCircle(
-      center: this.location,
-      radius: radius,
-    ));
+    Path path = Path();
+    path.addOval(
+      Rect.fromCircle(
+        center: location,
+        radius: radius,
+      ),
+    );
 
     return path.contains(position);
   }

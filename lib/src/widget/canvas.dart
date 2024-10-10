@@ -15,15 +15,15 @@ class DiagramEditorCanvas extends StatefulWidget {
 
   /// The canvas where all components and links are shown on.
   const DiagramEditorCanvas({
-    Key? key,
+    super.key,
     required this.policy,
-  }) : super(key: key);
+  });
 
   @override
-  _DiagramEditorCanvasState createState() => _DiagramEditorCanvasState();
+  DiagramEditorCanvasState createState() => DiagramEditorCanvasState();
 }
 
-class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
+class DiagramEditorCanvasState extends State<DiagramEditorCanvas>
     with TickerProviderStateMixin {
   PolicySet? withControlPolicy;
 
@@ -123,8 +123,11 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
       children: [
         ...showBackgroundWidgets(),
         ...showOtherWithComponentDataUnder(canvasModel),
-        ...showComponents(canvasModel),
+        if (widget.policy.showLinksOnTopOfComponents)
+          ...showComponents(canvasModel),
         ...showLinks(canvasModel),
+        if (!widget.policy.showLinksOnTopOfComponents)
+          ...showComponents(canvasModel),
         ...showOtherWithComponentDataOver(canvasModel),
         ...showForegroundWidgets(),
       ],
@@ -132,16 +135,20 @@ class _DiagramEditorCanvasState extends State<DiagramEditorCanvas>
   }
 
   Widget canvasAnimated(CanvasModel canvasModel) {
+    final animationController =
+        (withControlPolicy as CanvasControlPolicy).getAnimationController();
+    if (animationController == null) return canvasStack(canvasModel);
+
     return AnimatedBuilder(
-      animation:
-          (withControlPolicy as CanvasControlPolicy).getAnimationController(),
+      animation: animationController,
       builder: (BuildContext context, Widget? child) {
         (withControlPolicy as CanvasControlPolicy).canUpdateCanvasModel = true;
         return Transform(
           transform: Matrix4.identity()
             ..translate(
-                (withControlPolicy as CanvasControlPolicy).transformPosition.dx,
-                (withControlPolicy as CanvasControlPolicy).transformPosition.dy)
+              (withControlPolicy as CanvasControlPolicy).transformPosition.dx,
+              (withControlPolicy as CanvasControlPolicy).transformPosition.dy,
+            )
             ..scale((withControlPolicy as CanvasControlPolicy).transformScale),
           child: child,
         );

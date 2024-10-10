@@ -51,7 +51,11 @@ void main() {
       model.addComponent(componentDataB);
 
       String linkId = model.connectTwoComponents(
-          componentDataA.id, componentDataB.id, LinkStyle(), null);
+        componentDataA.id,
+        componentDataB.id,
+        LinkStyle(),
+        null,
+      );
 
       expect(model.links.length, 1);
 
@@ -82,7 +86,11 @@ void main() {
       model.addComponent(componentDataB);
 
       String linkId = model.connectTwoComponents(
-          componentDataA.id, componentDataB.id, LinkStyle(), null);
+        componentDataA.id,
+        componentDataB.id,
+        LinkStyle(),
+        null,
+      );
 
       model.removeLink(linkId);
 
@@ -110,9 +118,17 @@ void main() {
       model.addComponent(componentDataC);
 
       model.connectTwoComponents(
-          componentDataA.id, componentDataC.id, LinkStyle(), null);
+        componentDataA.id,
+        componentDataC.id,
+        LinkStyle(),
+        null,
+      );
       model.connectTwoComponents(
-          componentDataC.id, componentDataB.id, LinkStyle(), null);
+        componentDataC.id,
+        componentDataB.id,
+        LinkStyle(),
+        null,
+      );
 
       model.removeComponentConnections(componentDataC.id);
 

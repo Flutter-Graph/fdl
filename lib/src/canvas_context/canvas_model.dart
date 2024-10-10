@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 class CanvasModel with ChangeNotifier {
-  Uuid _uuid = Uuid();
+  final Uuid _uuid = const Uuid();
   HashMap<String, ComponentData> components = HashMap();
   HashMap<String, LinkData> links = HashMap();
   PolicySet policySet;
@@ -24,7 +24,7 @@ class CanvasModel with ChangeNotifier {
     );
   }
 
-  updateCanvas() {
+  void updateCanvas() {
     notifyListeners();
   }
 
@@ -59,32 +59,32 @@ class CanvasModel with ChangeNotifier {
     return componentData.id;
   }
 
-  removeComponent(String id) {
+  void removeComponent(String id) {
     removeComponentConnections(id);
     components.remove(id);
     notifyListeners();
   }
 
-  removeComponentConnections(String id) {
+  void removeComponentConnections(String id) {
     assert(components.keys.contains(id));
 
-    List<String> _linksToRemove = [];
+    List<String> linksToRemove = [];
 
     getComponent(id).connections.forEach((connection) {
-      _linksToRemove.add(connection.connectionId);
+      linksToRemove.add(connection.connectionId);
     });
 
-    _linksToRemove.forEach(removeLink);
+    linksToRemove.forEach(removeLink);
     notifyListeners();
   }
 
-  removeAllComponents() {
+  void removeAllComponents() {
     links.clear();
     components.clear();
     notifyListeners();
   }
 
-  setComponentZOrder(String componentId, int zOrder) {
+  void setComponentZOrder(String componentId, int zOrder) {
     getComponent(componentId).zOrder = zOrder;
     notifyListeners();
   }
@@ -93,11 +93,11 @@ class CanvasModel with ChangeNotifier {
   /// Returns new zOrder
   int moveComponentToTheFront(String componentId) {
     int zOrderMax = getComponent(componentId).zOrder;
-    components.values.forEach((component) {
+    for (final component in components.values) {
       if (component.zOrder > zOrderMax) {
         zOrderMax = component.zOrder;
       }
-    });
+    }
     getComponent(componentId).zOrder = zOrderMax + 1;
     notifyListeners();
     return zOrderMax + 1;
@@ -107,32 +107,32 @@ class CanvasModel with ChangeNotifier {
   /// /// Returns new zOrder
   int moveComponentToTheBack(String componentId) {
     int zOrderMin = getComponent(componentId).zOrder;
-    components.values.forEach((component) {
+    for (final component in components.values) {
       if (component.zOrder < zOrderMin) {
         zOrderMin = component.zOrder;
       }
-    });
+    }
     getComponent(componentId).zOrder = zOrderMin - 1;
     notifyListeners();
     return zOrderMin - 1;
   }
 
-  addLink(LinkData linkData) {
+  void addLink(LinkData linkData) {
     links[linkData.id] = linkData;
     notifyListeners();
   }
 
-  removeLink(String linkId) {
+  void removeLink(String linkId) {
     getComponent(getLink(linkId).sourceComponentId).removeConnection(linkId);
     getComponent(getLink(linkId).targetComponentId).removeConnection(linkId);
     links.remove(linkId);
     notifyListeners();
   }
 
-  removeAllLinks() {
-    components.values.forEach((component) {
+  void removeAllLinks() {
+    for (final component in components.values) {
       removeComponentConnections(component.id);
-    });
+    }
   }
 
   /// Creates a link between components. Returns created link's id.
@@ -178,7 +178,7 @@ class CanvasModel with ChangeNotifier {
         targetComponent.position +
             targetComponent.getPointOnComponent(targetLinkAlignment),
       ],
-      linkStyle: linkStyle == null ? LinkStyle() : linkStyle,
+      linkStyle: linkStyle ?? LinkStyle(),
       data: data,
     );
 
@@ -186,11 +186,11 @@ class CanvasModel with ChangeNotifier {
     return linkId;
   }
 
-  updateLinks(String componentId) {
+  void updateLinks(String componentId) {
     assert(componentExists(componentId),
         'model does not contain this component id: $componentId');
     var component = getComponent(componentId);
-    component.connections.forEach((connection) {
+    for (final connection in component.connections) {
       var link = getLink(connection.connectionId);
 
       ComponentData sourceComponent = component;
@@ -213,7 +213,7 @@ class CanvasModel with ChangeNotifier {
 
       _setLinkEndpoints(link, sourceComponent, targetComponent,
           firstLinkAlignment, secondLinkAlignment);
-    });
+    }
   }
 
   Alignment _getLinkEndpointAlignment(
@@ -235,7 +235,7 @@ class CanvasModel with ChangeNotifier {
     }
   }
 
-  _setLinkEndpoints(
+  void _setLinkEndpoints(
     LinkData link,
     ComponentData component1,
     ComponentData component2,

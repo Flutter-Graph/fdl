@@ -37,8 +37,8 @@ class GridPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var lineHorizontalLength;
-    var lineVerticalLength;
+    late double lineHorizontalLength;
+    late double lineVerticalLength;
     if (matchParentSize) {
       lineHorizontalLength = size.width / scale;
       lineVerticalLength = size.height / scale;
@@ -84,5 +84,20 @@ class GridPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    if (oldDelegate is GridPainter) {
+      return oldDelegate.lineWidth != lineWidth ||
+          oldDelegate.lineColor != lineColor ||
+          oldDelegate.horizontalGap != horizontalGap ||
+          oldDelegate.verticalGap != verticalGap ||
+          oldDelegate.offset != offset ||
+          oldDelegate.scale != scale ||
+          oldDelegate.showHorizontal != showHorizontal ||
+          oldDelegate.showVertical != showVertical ||
+          oldDelegate.lineLength != lineLength ||
+          oldDelegate.isAntiAlias != isAntiAlias ||
+          oldDelegate.matchParentSize != matchParentSize;
+    }
+    return true;
+  }
 }

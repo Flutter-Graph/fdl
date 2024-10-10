@@ -12,9 +12,9 @@ class Link extends StatelessWidget {
 
   /// Widget that connects two [Component]s on the canvas. Another fundamental unit of the diagram.
   const Link({
-    Key? key,
+    super.key,
     required this.policy,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -63,11 +63,17 @@ class Link extends StatelessWidget {
                           policy.onLinkJointLongPress(index, linkData.id),
                       onLongPressStart: (LongPressStartDetails details) =>
                           policy.onLinkJointLongPressStart(
-                              index, linkData.id, details),
+                        index,
+                        linkData.id,
+                        details,
+                      ),
                       onLongPressMoveUpdate:
                           (LongPressMoveUpdateDetails details) =>
                               policy.onLinkJointLongPressMoveUpdate(
-                                  index, linkData.id, details),
+                        index,
+                        linkData.id,
+                        details,
+                      ),
                       onLongPressEnd: (LongPressEndDetails details) => policy
                           .onLinkJointLongPressEnd(index, linkData.id, details),
                       onLongPressUp: () =>
@@ -83,7 +89,7 @@ class Link extends StatelessWidget {
                     ),
                   );
                 },
-              ).toList(),
+              ),
               ...policy.showWidgetsWithLinkData(context, linkData),
             ],
           ),
